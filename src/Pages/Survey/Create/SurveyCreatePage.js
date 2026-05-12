@@ -16,6 +16,7 @@ import {
   FiImage,
   FiSliders,
   FiXCircle,
+  FiCopy,
 } from "react-icons/fi";
 import SurveySetupModal from "../Select/Modal/SurveySetupModal";
 
@@ -39,6 +40,7 @@ const SurveyCreatePage = () => {
     handleUpdateBasicInfo,
     basicInfo,
     handleOpenPreviewWindow,
+    duplicateQuestion,
   } = useSurveyEditor();
 
   const fileInputRefs = useRef({});
@@ -305,6 +307,16 @@ const SurveyCreatePage = () => {
               <div
                 style={{ display: "flex", alignContent: "center", gap: "15px" }}
               >
+                <S.DeleteIconButton
+                  onClick={(e) => {
+                    e.stopPropagation(); // 카드 활성화 이벤트 전파 방지
+                    duplicateQuestion(q.id);
+                  }}
+                  title="질문 복사"
+                  style={{ color: "#64748b" }} // 삭제 버튼과 구분하기 위해 회색 계열 추천
+                >
+                  <FiCopy /> 복사
+                </S.DeleteIconButton>
                 <S.RequiredSection>
                   <S.RequiredLabel>필수 항목</S.RequiredLabel>
                   <S.ToggleSwitch>

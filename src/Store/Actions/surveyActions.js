@@ -53,3 +53,8 @@ export const setBasicInfo = (data) => ({
 export const resetSurveyForm = () => ({
   type: types.RESET_SURVEY_FORM,
 });
+
+export const duplicateQuestion = (id) => ({
+  type: types.DUPLICATE_QUESTION,
+  payload: id,
+});

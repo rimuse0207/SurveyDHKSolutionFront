@@ -7,6 +7,7 @@ import {
   removeQuestion,
   setBasicInfo,
   resetSurveyForm,
+  duplicateQuestion,
 } from "../../Store/Actions/surveyActions";
 import { Request_Post_Axios } from "../../API/index";
 
@@ -122,6 +123,7 @@ const useSurveyEditor = () => {
     addQuestion: () => dispatch(addQuestion()),
     removeQuestion: (id) => dispatch(removeQuestion(id)),
     updateQuestion: (id, updates) => dispatch(updateQuestion(id, updates)),
+    duplicateQuestion: (id) => dispatch(duplicateQuestion(id)),
     handleOpenPreviewWindow,
     handleCloseWindow,
   };

@@ -87,6 +87,24 @@ const surveyReducer = (state = initialState, action) => {
         items: state.items.filter((q) => q.id !== action.payload),
       };
 
+    case types.DUPLICATE_QUESTION: {
+      const index = state.items.findIndex((q) => q.id === action.payload);
+      if (index === -1) return state;
+
+      const source = state.items[index];
+
+      // 깊은 복사: 옵션 배열 등 객체 내부의 참조값을 완전히 분리
+      const clonedQuestion = {
+        ...JSON.parse(JSON.stringify(source)),
+        id: `q_${Date.now()}`, // 새 고유 ID 생성
+      };
+
+      const newItems = [...state.items];
+      newItems.splice(index + 1, 0, clonedQuestion); // 기존 질문 바로 아래 삽입
+
+      return { ...state, items: newItems };
+    }
+
     default:
       return state;
   }

@@ -58,7 +58,7 @@ const SurveyPreview = ({
         {/* 상단 닫기 및 가이드 */}
         {!isResponseMode && (
           <PreviewTopBar>
-            <span>✨ 미리보기 모드 (응답은 저장되지 않습니다)</span>
+            <span>✨ 미리보기 모드</span>
             <CloseIconButton onClick={onClose}>
               <FiX size={24} />
             </CloseIconButton>

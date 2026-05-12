@@ -11,6 +11,7 @@ export const DELETE_SURVEY = "DELETE_SURVEY"; // 설문지 자체를 삭제
 export const ADD_QUESTION = "ADD_QUESTION";
 export const UPDATE_QUESTION = "UPDATE_QUESTION";
 export const REMOVE_QUESTION = "REMOVE_QUESTION"; // 질문 항목을 삭제
+export const DUPLICATE_QUESTION = "DUPLICATE_QUESTION"; // 질문 복사
 
 // 설문 작성 전 기본 데이터
 export const SET_BASIC_INFO = "SET_BASIC_INFO";

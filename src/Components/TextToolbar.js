@@ -35,13 +35,13 @@ const TextToolbar = ({ onAction }) => {
       >
         U
       </ToolbarButton>
-      <ToolbarButton
+      {/* <ToolbarButton
         style={{ fontSize: "1.3em" }}
         title="링크 삽입"
         onMouseDown={(e) => handleAction(e, "createLink")}
       >
         <CiLink />
-      </ToolbarButton>
+      </ToolbarButton> */}
       {/* <Divider style={{ height: "20px", margin: "0 4px", width: "1px" }} /> */}
       <ToolbarButton
         title="서식 삭제"

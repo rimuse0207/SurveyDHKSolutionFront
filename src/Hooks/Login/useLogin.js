@@ -17,7 +17,6 @@ export const useLogin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // 실제 환경에서는 여기서 axios 등으로 서버 통신을 합니다.
 
     const response = await Request_Post_Axios(`/Auth/LoginCheck`, {
       email: values.email,
@@ -25,8 +24,14 @@ export const useLogin = () => {
     });
 
     if (response.status) {
-      localStorage.setItem("Token", response.data.token);
+      if (response.data.PasswordChange) {
+        alert("초기 비밀번호를 변경해야 합니다. 변경 페이지로 이동합니다.");
 
+        navigate("/ChangePassword", { state: { email: values.email } });
+        return;
+      }
+
+      localStorage.setItem("Token", response.data.token);
       dispatch(
         loginSuccess({
           name: response.data.result.name,

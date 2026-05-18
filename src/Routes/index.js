@@ -7,6 +7,7 @@ import SurveyPreviewPage from "../Pages/Survey/Preview/SurveyPreviewPage";
 import SurveyResponsePage from "../Pages/Survey/Response/SurveyResponsePage";
 import SurveyResultPage from "../Pages/Survey/Result/SurveyResultPage";
 import AdminLoginPage from "../Pages/Login/LoginPage";
+import PasswordChangePage from "../Pages/Login/PasswordChangePage";
 
 const AppRoutes = () => {
   return (
@@ -15,6 +16,10 @@ const AppRoutes = () => {
       {/* <Route path="/" element={<SurveyListPage />} /> */}
 
       <Route path="/" element={<AdminLoginPage />} />
+      <Route
+        path="/ChangePassword"
+        element={<PasswordChangePage></PasswordChangePage>}
+      ></Route>
       <Route path="/survey" element={<SurveyList />} />
       {/* 설문 작성 */}
       <Route path="/survey/create/editor" element={<SurveyCreatePage />} />

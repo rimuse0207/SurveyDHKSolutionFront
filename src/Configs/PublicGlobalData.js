@@ -4,4 +4,8 @@ export const COMPANY_LIST = [
   { name: "SEMCNS", domain: "semcns.com" },
   { name: "DHKSolution", domain: "dhk.co.kr" },
   { name: "SEMTEK", domain: "semtek.co.kr" },
+  { name: "SEMTOOLS", domain: "semtools.co.kr" },
+  { name: "ORACOM", domain: "oracom.co.kr" },
+  { name: "YIKJ", domain: "yikcorp.com" },
+  { name: "DAS", domain: "discoas.co.jp" },
 ];

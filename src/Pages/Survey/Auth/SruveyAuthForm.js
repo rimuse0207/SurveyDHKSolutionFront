@@ -29,6 +29,7 @@ const SurveyAuthForm = ({
   const [isVerified, setIsVerified] = useState(false); // 코드 인증 성공 여부
   const [timeLeft, setTimeLeft] = useState(300); // 5분 (300초)
   const timerRef = useRef(null);
+  const [emailError, setEmailError] = useState("");
 
   // 타이머 로직
   useEffect(() => {
@@ -64,12 +65,36 @@ const SurveyAuthForm = ({
 
   const handleEmailIdChange = (e) => {
     const id = e.target.value;
+
+    // 💡 1. 소속 회사를 먼저 선택했는지 체크
+    if (!authInfo.company) {
+      setEmailError("먼저 소속 회사를 선택한 후 이메일을 입력해 주세요.");
+      return; // 회사가 선택되지 않았다면 여기서 즉시 중단 (입력 방지)
+    }
+
+    // 💡 2. 기존의 @ 포함 여부 체크
+    if (id.includes("@")) {
+      setEmailError("@ 이전의 메일 아이디만 입력해주세요.");
+      return;
+    } else {
+      setEmailError(""); // 에러 조건이 모두 없으면 메시지 초기화
+    }
+
     setEmailId(id);
     setAuthInfo({ ...authInfo, email: `${id}@${fixedDomain}` });
   };
 
   // 코드 발송 버튼 핸들러
   const handleSendClick = async () => {
+    if (!authInfo.company) {
+      alert("회사를 선택 해주세요.");
+      return;
+    }
+    if (!emailId) {
+      alert("이메일 아이디를 작성 해주세요.");
+      return;
+    }
+
     const success = await onSendCode(); // 부모에서 API 호출
     if (success) {
       setIsCodeSent(true);
@@ -146,14 +171,24 @@ const SurveyAuthForm = ({
                 <FiMail className="input-icon" />
                 <input
                   type="text"
-                  placeholder="이메일 아이디"
+                  placeholder={
+                    authInfo.company
+                      ? "이메일 아이디"
+                      : "회사를 먼저 선택해 주세요"
+                  } // 회사가 없을 때 힌트 텍스트 변경
                   value={emailId}
                   onChange={handleEmailIdChange}
-                  disabled={isCodeSent || isVerified}
+                  // 💡 회사가 선택되지 않았을 때도 입력창을 비활성화(disabled) 시켜서 실수를 방지할 수 있습니다.
+                  disabled={!authInfo.company || isCodeSent || isVerified}
                 />
               </div>
               <DomainFixedBox>@{fixedDomain}</DomainFixedBox>
             </EmailInputGroup>
+            {emailError && (
+              <span style={{ color: "red", fontSize: "12px" }}>
+                {emailError}
+              </span>
+            )}
 
             {/* 3. 인증코드 입력 및 발송/재발송 */}
             <InputWrapper>

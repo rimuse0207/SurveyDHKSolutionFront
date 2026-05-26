@@ -8,6 +8,7 @@ import {
   setBasicInfo,
   resetSurveyForm,
   duplicateQuestion,
+  loadSurveyForm, // 여기에 이미 잘 임포트해 두셨네요! 👍
 } from "../../Store/Actions/surveyActions";
 import { Request_Post_Axios } from "../../API/index";
 
@@ -25,6 +26,30 @@ const useSurveyEditor = () => {
   const [formTitle, setFormTitle] = useState("");
   const [formDesc, setFormDesc] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false); // 통합 모달 상태
+
+  const loadSurveyForCopy = (oldSurveyData, oldSurveyOptions) => {
+    if (!oldSurveyData) return;
+
+    // 1. 컴포넌트 로컬 상태(제목, 설명) 업데이트
+    setFormTitle(
+      oldSurveyData.title ? `${oldSurveyData.title}` : "복사된 설문지",
+    );
+    setFormDesc(oldSurveyData.description || "");
+
+    // 2. 질문 데이터 복사 + 고유 ID 새로 발급 (React key 깨짐 방지)
+    const clonedQuestions = (oldSurveyOptions || []).map((q, index) => ({
+      ...q,
+      id: `q_${Date.now()}_${index}_${Math.random().toString(36).substr(2, 5)}`,
+    }));
+
+    // 4. 리듀서로 액션 디스패치 (Redux Store 업데이트)
+    dispatch(
+      loadSurveyForm({
+        questions: clonedQuestions,
+        basicInfo,
+      }),
+    );
+  };
 
   // 텍스트 포맷팅 (Bold, Italic 등)
   const handleFormat = (command) => {
@@ -44,7 +69,7 @@ const useSurveyEditor = () => {
     }
 
     const payload = {
-      ...basicInfo, // 대상, 익명여부, 날짜 등
+      ...basicInfo,
       title: formTitle,
       description: formDesc,
       questions: questions,
@@ -56,8 +81,6 @@ const useSurveyEditor = () => {
       if (response.status) {
         alert("설문지가 성공적으로 저장되었습니다!");
         dispatch(resetSurveyForm());
-
-        // 2. 대시보드(목록) 페이지로 이동
         navigate("/Survey");
       }
     } catch (error) {
@@ -79,10 +102,8 @@ const useSurveyEditor = () => {
       questions: questions,
     };
 
-    // 1. 현재 작성 중인 데이터를 로컬 스토리지에 임시 저장
     localStorage.setItem("survey_preview_temp", JSON.stringify(previewData));
 
-    // 2. 새 창 열기 (가로 800, 세로 900 정도의 팝업)
     const width = 800;
     const height = 900;
     const left = window.screen.width / 2 - width / 2;
@@ -97,7 +118,6 @@ const useSurveyEditor = () => {
 
   const handleCloseWindow = () => {
     if (window.opener) {
-      // window.open으로 열린 창인 경우
       window.close();
     }
   };
@@ -124,6 +144,7 @@ const useSurveyEditor = () => {
     removeQuestion: (id) => dispatch(removeQuestion(id)),
     updateQuestion: (id, updates) => dispatch(updateQuestion(id, updates)),
     duplicateQuestion: (id) => dispatch(duplicateQuestion(id)),
+    loadSurveyForCopy, // 💡 [추가위치 2] 컴포넌트(UI 페이지)에서 사용할 수 있도록 리턴에 포함!
     handleOpenPreviewWindow,
     handleCloseWindow,
   };

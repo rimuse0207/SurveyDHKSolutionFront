@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import * as S from "./SurveyStyles";
 import styled from "styled-components";
 import useSurveyEditor from "../../../Hooks/Survey/useSurveyEditor";
@@ -19,13 +19,14 @@ import {
   FiCopy,
 } from "react-icons/fi";
 import SurveySetupModal from "../Select/Modal/SurveySetupModal";
+import SurveySelectModal from "./Modal/SurveySelectModal";
+import { Request_Get_Axios } from "../../../API";
 
 const SurveyCreatePage = () => {
   const {
     questions,
     activeId,
     setActiveId,
-
     formTitle,
     setFormTitle,
     formDesc,
@@ -41,9 +42,26 @@ const SurveyCreatePage = () => {
     basicInfo,
     handleOpenPreviewWindow,
     duplicateQuestion,
+    loadSurveyForCopy,
   } = useSurveyEditor();
 
   const fileInputRefs = useRef({});
+  const [isSelectModalOpen, setIsSelectModalOpen] = useState(false);
+
+  const handleSelectSurveyToCopy = async (selectedSurvey) => {
+    const confirmCopy = window.confirm(
+      `'${selectedSurvey.title}' 설문을 복제하시겠습니까?\n현재 편집 중인 내용은 모두 지워집니다.`,
+    );
+
+    if (confirmCopy) {
+      const response = await Request_Get_Axios(
+        `/Select/SelectSurvey/${selectedSurvey.survey_id}/detail`,
+      );
+
+      loadSurveyForCopy(response.data[0], response.data.questions); // 훅에 기재된 전체 데이터 주입 함수 실행
+      setIsSelectModalOpen(false); // 모달 닫기
+    }
+  };
 
   const handleFileChange = (questionId, e) => {
     const file = e.target.files[0];
@@ -114,6 +132,12 @@ const SurveyCreatePage = () => {
         </S.InfoSummaryBar>
 
         <div style={{ display: "flex", gap: "10px" }}>
+          <SecondaryButton
+            onClick={() => setIsSelectModalOpen(true)}
+            style={{ borderColor: "#f59e0b", color: "#d97706" }}
+          >
+            이전 설문 복제
+          </SecondaryButton>
           <SecondaryButton onClick={handleOpenPreviewWindow}>
             미리보기 (새창)
           </SecondaryButton>
@@ -355,6 +379,11 @@ const SurveyCreatePage = () => {
         initialData={basicInfo}
         mode="edit"
       />
+      <SurveySelectModal
+        isOpen={isSelectModalOpen}
+        onClose={() => setIsSelectModalOpen(false)}
+        onSelect={handleSelectSurveyToCopy}
+      />
     </S.PageContainer>
   );
 };
@@ -391,6 +420,7 @@ const SecondaryButton = styled(PrimaryButton)`
   background: white;
   color: #0ea5e9;
   border: 1px solid #bae6fd;
+  font-size: 0.8rem;
   &:hover {
     background: #f0f9ff;
   }

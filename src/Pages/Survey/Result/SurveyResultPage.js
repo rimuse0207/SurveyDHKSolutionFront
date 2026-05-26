@@ -25,7 +25,7 @@ const SurveyResultPage = () => {
   const fetchResultData = async () => {
     try {
       const res = await Request_Get_Axios(`/Select/SurveyResult/${uuid}`);
-      console.log(res);
+
       if (res.status) setData(res.data);
     } catch (err) {
       alert("데이터를 불러오지 못했습니다.");

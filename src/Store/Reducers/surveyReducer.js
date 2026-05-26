@@ -2,14 +2,12 @@ import * as types from "../Actions/surveyTypes";
 import moment from "moment";
 
 const initialState = {
-  // 1. 설문 기초 설정 (추가됨)
   basicInfo: {
     targetType: "external",
     isAnonymous: true,
     startDate: moment().format("YYYY-MM-DD"),
     endDate: moment().add(1, "month").format("YYYY-MM-DD"),
   },
-  // 2. 설문 질문 리스트 (기존 items)
   items: [],
   loading: false,
   error: null,
@@ -17,6 +15,13 @@ const initialState = {
 
 const surveyReducer = (state = initialState, action) => {
   switch (action.type) {
+    case types.LOAD_SURVEY_FORM:
+      return {
+        ...state,
+        items: action.payload.questions,
+        basicInfo: action.payload.basicInfo,
+      };
+
     // --- 기초 정보 관리 ---
     case types.SET_BASIC_INFO:
       return {
@@ -93,14 +98,13 @@ const surveyReducer = (state = initialState, action) => {
 
       const source = state.items[index];
 
-      // 깊은 복사: 옵션 배열 등 객체 내부의 참조값을 완전히 분리
       const clonedQuestion = {
         ...JSON.parse(JSON.stringify(source)),
-        id: `q_${Date.now()}`, // 새 고유 ID 생성
+        id: `q_${Date.now()}`,
       };
 
       const newItems = [...state.items];
-      newItems.splice(index + 1, 0, clonedQuestion); // 기존 질문 바로 아래 삽입
+      newItems.splice(index + 1, 0, clonedQuestion);
 
       return { ...state, items: newItems };
     }

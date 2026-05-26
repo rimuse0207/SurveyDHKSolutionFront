@@ -58,3 +58,8 @@ export const duplicateQuestion = (id) => ({
   type: types.DUPLICATE_QUESTION,
   payload: id,
 });
+
+export const loadSurveyForm = (surveyData) => ({
+  type: types.LOAD_SURVEY_FORM,
+  payload: surveyData,
+});

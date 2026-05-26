@@ -18,7 +18,7 @@ export const PageContainer = styled.div`
 export const FormHeaderContainer = styled.div`
   background: white;
   width: 100%;
-  max-width: 770px;
+  max-width: 870px;
   border-radius: 20px;
   margin-bottom: 20px;
   border: 1px solid #e2e8f0;
@@ -41,7 +41,7 @@ export const HeaderContent = styled.div`
 export const QuestionCard = styled.div`
   background: white;
   width: 100%;
-  max-width: 770px;
+  max-width: 870px;
   border-radius: 16px;
   padding: 30px;
   margin-top: 20px;

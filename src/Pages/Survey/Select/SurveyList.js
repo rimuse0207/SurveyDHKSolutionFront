@@ -141,8 +141,14 @@ const SurveyDashboard = () => {
               </StatusRibbon>
               <CardContent>
                 <SurveyInfo>
-                  <SurveyTitle>{survey.title}</SurveyTitle>
-                  <SurveyDesc>{survey.description || "설명 없음"}</SurveyDesc>
+                  <SurveyTitle
+                    dangerouslySetInnerHTML={{ __html: survey.title || "" }}
+                  ></SurveyTitle>
+                  <SurveyDesc
+                    dangerouslySetInnerHTML={{
+                      __html: survey.description || "설명 없음",
+                    }}
+                  ></SurveyDesc>
                 </SurveyInfo>
 
                 <CardMeta>

@@ -55,9 +55,10 @@ const useSurveys = () => {
       const res = await Request_Post_Axios(`/Select/closeSurvey/${id}/close`);
       if (res.status) {
         // 로컬 상태 업데이트 (다시 불러오지 않고 상태값만 변경)
-        setSurveys((prev) =>
-          prev.map((s) => (s.id === id ? { ...s, status: "closed" } : s)),
-        );
+        // setSurveys((prev) =>
+        //   prev.map((s) => (s.id === id ? { ...s, status: "closed" } : s)),
+        // );
+        await fetchSurveys();
         alert("설문이 마감되었습니다.");
       } else {
         alert("설문 마감에 실패하였습니다.");

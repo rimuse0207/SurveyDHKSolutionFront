@@ -99,6 +99,14 @@ const SurveyCreatePage = () => {
     e.target.value = "";
   };
 
+  const handlePasteTextOnly = (e) => {
+    e.preventDefault();
+
+    const text = e.clipboardData.getData("text/plain");
+
+    document.execCommand("insertText", false, text);
+  };
+
   return (
     <S.PageContainer>
       <ActionBar>
@@ -151,12 +159,14 @@ const SurveyCreatePage = () => {
           <S.TitleInput
             contentEditable
             placeholder="제목 없는 설문지"
+            onPaste={handlePasteTextOnly}
             onBlur={(e) => setFormTitle(e.currentTarget.innerHTML)}
             dangerouslySetInnerHTML={{ __html: formTitle }}
           />
           <S.DescInput
             contentEditable
             placeholder="설문 설명"
+            onPaste={handlePasteTextOnly}
             onBlur={(e) => setFormDesc(e.currentTarget.innerHTML)}
             dangerouslySetInnerHTML={{ __html: formDesc }}
           />
@@ -178,6 +188,7 @@ const SurveyCreatePage = () => {
                 updateQuestion(q.id, { title: e.currentTarget.innerHTML })
               }
               dangerouslySetInnerHTML={{ __html: q.title || "" }}
+              onPaste={handlePasteTextOnly}
             />
             <S.TypeSelectWrapper>
               <S.TypeSelect
@@ -406,7 +417,7 @@ const PrimaryButton = styled.button`
   background: #0ea5e9;
   color: white;
   border: none;
-  padding: 10px 24px;
+  padding: 10px 16px;
   border-radius: 8px;
   font-weight: 700;
   cursor: pointer;

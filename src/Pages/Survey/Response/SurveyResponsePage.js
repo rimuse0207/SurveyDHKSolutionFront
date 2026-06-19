@@ -20,11 +20,12 @@ const SurveyResponsePage = () => {
   });
   const [isVerified, setIsVerified] = useState(false);
   const responder = useSelector((state) => state.responder);
+  const [initialAnswers, setInitialAnswers] = useState({});
 
   useEffect(() => {
     fetchSurveyData();
   }, [uuid]);
-  // SurveyResponsePage.js 내부 핵심 로직
+
   const fetchSurveyData = async () => {
     try {
       // URL의 UUID로 서버에 요청
@@ -34,6 +35,20 @@ const SurveyResponsePage = () => {
         const data = res.data;
 
         setSurvey(data);
+
+        // 🌟 [추가된 로직] 척도형(rating) 질문의 초기값 세팅
+        if (data.questions && data.questions.length > 0) {
+          const initialAnswers = {};
+
+          data.questions.forEach((q) => {
+            if (q.type === "rating") {
+              initialAnswers[q.id] = String(q.ratingValue || 3);
+            }
+          });
+
+          // 만들어진 객체 { 26: '3', 27: '3' } 를 상태에 저장
+          setInitialAnswers(initialAnswers);
+        }
 
         // 1. 내부용(internal) -> 인증 단계로
         if (data.target_type === "internal") {
@@ -170,6 +185,7 @@ const SurveyResponsePage = () => {
           questions={survey.questions}
           isResponseMode={true}
           onSubmit={handleResponseSubmit}
+          initialAnswers={initialAnswers}
         />
       )}
 

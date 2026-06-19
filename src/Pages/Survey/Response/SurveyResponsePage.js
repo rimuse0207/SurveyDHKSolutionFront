@@ -36,7 +36,6 @@ const SurveyResponsePage = () => {
 
         setSurvey(data);
 
-        // 🌟 [추가된 로직] 척도형(rating) 질문의 초기값 세팅
         if (data.questions && data.questions.length > 0) {
           const initialAnswers = {};
 
@@ -46,7 +45,6 @@ const SurveyResponsePage = () => {
             }
           });
 
-          // 만들어진 객체 { 26: '3', 27: '3' } 를 상태에 저장
           setInitialAnswers(initialAnswers);
         }
 

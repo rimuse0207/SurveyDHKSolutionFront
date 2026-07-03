@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import SurveySetupModal from "./Modal/SurveySetupModal";
 import { Request_Get_Axios } from "../../../API";
+import moment from "moment";
 
 const SurveyDashboard = () => {
   const Navigate = useNavigate();
@@ -95,6 +96,14 @@ const SurveyDashboard = () => {
     );
   };
 
+  function isPastEndDate(endDate) {
+    const now = moment();
+
+    const end = moment(endDate);
+
+    return now.isAfter(end);
+  }
+
   return (
     <MainContainer>
       {/* 배경색을 하늘색 그라데이션으로 변경 */}
@@ -136,8 +145,14 @@ const SurveyDashboard = () => {
               key={survey.survey_id}
               $isClosed={survey.status === "closed"}
             >
-              <StatusRibbon $status={survey.status}>
-                {survey.status === "active" ? "진행 중" : "종료"}
+              <StatusRibbon
+                $status={
+                  isPastEndDate(survey.end_date) ? "closed" : survey.status
+                }
+              >
+                {survey.status === "active" && !isPastEndDate(survey.end_date)
+                  ? "진행 중"
+                  : "종료"}
               </StatusRibbon>
               <CardContent>
                 <SurveyInfo>
@@ -201,7 +216,9 @@ const SurveyDashboard = () => {
 
                 <ActionButton
                   onClick={() => closeSurvey(survey.survey_id)}
-                  disabled={survey.status === "closed"}
+                  disabled={
+                    survey.status === "closed" || isPastEndDate(survey.end_date)
+                  }
                   $isWarning={survey.status === "active"}
                   title="조기 마감"
                 >

@@ -31,6 +31,14 @@ const SurveyAuthForm = ({
   const timerRef = useRef(null);
   const [emailError, setEmailError] = useState("");
 
+  const codeInputRef = useRef(null);
+
+  useEffect(() => {
+    if (isCodeSent && !isVerified && codeInputRef.current) {
+      codeInputRef.current.focus();
+    }
+  }, [isCodeSent, isVerified]);
+
   // 타이머 로직
   useEffect(() => {
     if (isCodeSent && timeLeft > 0 && !isVerified) {
@@ -178,7 +186,12 @@ const SurveyAuthForm = ({
                   } // 회사가 없을 때 힌트 텍스트 변경
                   value={emailId}
                   onChange={handleEmailIdChange}
-                  // 💡 회사가 선택되지 않았을 때도 입력창을 비활성화(disabled) 시켜서 실수를 방지할 수 있습니다.
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault(); // 폼 제출 등 기본 동작 방지
+                      handleSendClick();
+                    }
+                  }}
                   disabled={!authInfo.company || isCodeSent || isVerified}
                 />
               </div>
@@ -194,6 +207,7 @@ const SurveyAuthForm = ({
             <InputWrapper>
               <FiSend className="input-icon" />
               <input
+                ref={codeInputRef}
                 type="text"
                 placeholder={
                   isCodeSent ? "코드 6자리 입력" : "코드를 발송해주세요"
@@ -202,6 +216,12 @@ const SurveyAuthForm = ({
                 onChange={(e) =>
                   setAuthInfo({ ...authInfo, code: e.target.value })
                 }
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && isCodeSent) {
+                    e.preventDefault();
+                    handleVerifyClick();
+                  }
+                }}
                 disabled={!isCodeSent || isVerified}
               />
               <SendButton

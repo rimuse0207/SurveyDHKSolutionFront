@@ -36,7 +36,7 @@ const SurveyPreview = ({
 
   const handleFinalSubmit = async () => {
     if (!isResponseMode) return; // 미리보기 모드면 작동 안 함
-    console.log(questions, answers);
+
     // 필수 체크
     const missing = questions.filter((q) => q.required && !answers[q.id]);
     if (missing.length > 0) {

@@ -100,9 +100,16 @@ const SurveyResultPage = () => {
             alignItems: "flex-start",
           }}
         >
-          <TitleGroup>
-            <h1>{data.survey.title} 결과 분석</h1>
-            <p>{data.survey.description}</p>
+          <TitleGroup style={{ width: "80%" }}>
+            <h1
+              dangerouslySetInnerHTML={{
+                __html: `${data.survey.title} 결과 분석`,
+              }}
+            />
+
+            <div
+              dangerouslySetInnerHTML={{ __html: data.survey.description }}
+            />
           </TitleGroup>
 
           {/* 엑셀 다운로드 버튼 추가 */}

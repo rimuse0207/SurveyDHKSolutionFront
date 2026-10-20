@@ -42,6 +42,8 @@ const SurveyResultPage = () => {
       // 기본 정보 (이름, 이메일, 소속, 참여시간)
       const row = {
         성함: resp.info.name,
+        부서: resp.info.departmentName,
+        직급: resp.info.titleName,
         이메일: resp.info.email,
         소속: resp.info.company,
         참여시간: new Date(resp.info.date).toLocaleString(),

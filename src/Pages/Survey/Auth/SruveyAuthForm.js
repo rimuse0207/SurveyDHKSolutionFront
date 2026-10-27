@@ -74,18 +74,16 @@ const SurveyAuthForm = ({
   const handleEmailIdChange = (e) => {
     const id = e.target.value;
 
-    // 💡 1. 소속 회사를 먼저 선택했는지 체크
     if (!authInfo.company) {
       setEmailError("먼저 소속 회사를 선택한 후 이메일을 입력해 주세요.");
-      return; // 회사가 선택되지 않았다면 여기서 즉시 중단 (입력 방지)
+      return;
     }
 
-    // 💡 2. 기존의 @ 포함 여부 체크
     if (id.includes("@")) {
       setEmailError("@ 이전의 메일 아이디만 입력해주세요.");
       return;
     } else {
-      setEmailError(""); // 에러 조건이 모두 없으면 메시지 초기화
+      setEmailError("");
     }
 
     setEmailId(id);
@@ -103,17 +101,17 @@ const SurveyAuthForm = ({
       return;
     }
 
-    const success = await onSendCode(); // 부모에서 API 호출
+    const success = await onSendCode();
     if (success) {
       setIsCodeSent(true);
-      setTimeLeft(300); // 타이머 리셋 (재발송 시에도 적용)
+      setTimeLeft(300);
       alert("인증 코드가 발송되었습니다.");
     }
   };
 
   // 코드 인증 확인 버튼 핸들러
   const handleVerifyClick = async () => {
-    const success = await onVerifyCode(authInfo.code); // 부모에서 인증 API 호출
+    const success = await onVerifyCode(authInfo.code);
     if (success) {
       setIsVerified(true);
       alert("인증에 성공하였습니다!");
@@ -134,14 +132,14 @@ const SurveyAuthForm = ({
             <FiUser size={28} />
           )}
         </IconCircle>
-        <h3>
+        <h3 style={{ marginTop: "10px" }}>
           {isVerified
             ? "인증이 완료되었습니다"
             : isInternal
               ? "사내 인증이 필요합니다"
               : "참여자 정보 입력"}
         </h3>
-        <p>
+        <p style={{ marginTop: "10px" }}>
           {isVerified
             ? "이제 설문 참여가 가능합니다. 아래 버튼을 눌러주세요."
             : isInternal
@@ -154,7 +152,7 @@ const SurveyAuthForm = ({
         {isInternal ? (
           <>
             {/* 1. 회사 선택 */}
-            <InputWrapper>
+            <InputWrapper style={{ marginTop: "20px" }}>
               <FiBriefcase className="input-icon" />
               <StyledSelect
                 value={authInfo.company}

@@ -1,5 +1,5 @@
 // src/routes/index.jsx
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import SurveyList from "../Pages/Survey/Select/SurveyList";
 import SurveyCreatePage from "../Pages/Survey/Create/SurveyCreatePage";
@@ -26,7 +26,7 @@ const AppRoutes = () => {
       <Route path="/survey/preview" element={<SurveyPreviewPage />} />
       <Route path="/survey/response/:uuid" element={<SurveyResponsePage />} />
       <Route path="/survey/result/:uuid" element={<SurveyResultPage />} />
-
+      <Route path="*" element={<Navigate to="/" replace></Navigate>}></Route>
       {/* 설문 수정 */}
       {/* <Route path="/edit/:id" element={<SurveyEditPage />} /> */}
 
